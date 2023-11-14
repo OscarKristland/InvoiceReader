@@ -14,3 +14,6 @@ class Invoice(models.Model):
 
     recipient_name = models.CharField(max_length=50)
     recipient_address = models.TextField()
+
+    def __str__(self):
+        return self.name

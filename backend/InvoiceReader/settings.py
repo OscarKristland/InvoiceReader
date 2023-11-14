@@ -37,9 +37,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'InvoiceReader',
     'rest_framework',
     'corsheaders',
-    'InvoiceReader',
 ]
 
 MIDDLEWARE = [
@@ -86,7 +86,7 @@ WSGI_APPLICATION = 'InvoiceReader.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.invoicereader',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
