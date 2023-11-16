@@ -1,8 +1,8 @@
-from Models import invoiceModel
 from rest_framework import serializers
+from models import Invoice
 
 
 class InvoiceSerializer(serializers.ModelSerializer):
     class Meta:
-        model = invoiceModel
+        model = Invoice
         fields = "__all__"
