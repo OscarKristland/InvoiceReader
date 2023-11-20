@@ -4,10 +4,10 @@ export function Uploader() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
 
-
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       const file = e.target.files?.[0];
+
       setSelectedFile(file || null);
     }
   };
@@ -63,13 +63,12 @@ export function Uploader() {
             <span className="font-semibold">Click to upload</span> or drag and
             drop
           </p>
-          <p className="text-xs text-gray-500 dark:text-gray-400">
-            PDF (MAX. 800x400px)
-          </p>
+          <p className="text-xs text-gray-500 dark:text-gray-400">.PDF</p>
         </div>
         <input
           id="dropzone-file"
           type="file"
+          accept=".pdf"
           className="hidden"
           onChange={handleFileChange}
         />
@@ -79,7 +78,14 @@ export function Uploader() {
         type="button"
         className="mt-2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
       >
-        Upload file
+        Upload PDF
+      </button>
+      <button
+        onClick={handleUpload}
+        type="button"
+        className="mt-2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+      >
+        View PDF
       </button>
       <div>
         {uploadedFiles.length > 0 && (
@@ -92,7 +98,6 @@ export function Uploader() {
             </ul>
           </div>
         )}
-
       </div>
     </div>
   );
