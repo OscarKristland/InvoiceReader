@@ -1,9 +1,11 @@
-import React from "react";
+import { Uploader } from "../components/Uploader";
 
-interface Props {}
-
-const Invoice = (props: Props) => {
-  return <div>Invoice</div>;
+const Invoice = () => {
+  return (
+    <div className="flex items-center justify-center w-1/2">
+      <Uploader />
+    </div>
+  );
 };
 
 export default Invoice;

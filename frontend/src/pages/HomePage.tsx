@@ -1,8 +1,6 @@
-import React from "react";
 
-interface Props {}
 
-const Home = (props: Props) => {
+const Home = () => {
   return (
     <div className="bg-black">
     </div>

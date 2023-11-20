@@ -2,3 +2,8 @@
 
 - Fixa så displaya går.
 - Fixa första sidan
+
+
+
+Framtida TODO
+- Fixa att routing system är med hash router istället för browser router
