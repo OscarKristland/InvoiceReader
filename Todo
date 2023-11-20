@@ -1,9 +1,14 @@
 - django plus, funkar för att debugga
+- hashrouter, lägga till routes
 
 - Fixa så displaya går.
 - Fixa första sidan
 
 
-
-Framtida TODO
 - Fixa att routing system är med hash router istället för browser router
+
+Varje stand-up möte!
+
+- Vad man gjorde
+- man planerar göra
+- om man är blockad
