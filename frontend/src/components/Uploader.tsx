@@ -1,8 +1,14 @@
 import React, { DragEvent, ChangeEvent, useState } from "react";
+import { Document, Page, pdfjs } from "react-pdf";
+
+pdfjs.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
 
 export function Uploader() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
+  const [numPages, setNumPages] = useState<number | null>(null);
+  const [pageNumber, setPageNumber] = useState(1);
+
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -32,6 +38,17 @@ export function Uploader() {
       console.log("No file selected");
     }
   };
+
+  const handleView = () => {
+    if (selectedFile) {
+      // Display the PDF using react-pdf
+      // You can set the PDF source to the selected file
+      // and use the Viewer component from react-pdf
+      setPageNumber(1);
+    } else {
+      console.log("No file selected");
+    }
+  }
 
   return (
     <div
@@ -81,12 +98,25 @@ export function Uploader() {
         Upload PDF
       </button>
       <button
-        onClick={handleUpload}
+        onClick={handleView}
         type="button"
         className="mt-2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
       >
         View PDF
       </button>
+      {selectedFile && (
+        <div style={{ width: '100%', height: '500px' }}>
+          <Document
+            file={URL.createObjectURL(selectedFile)}
+            onLoadSuccess={({ numPages }) => setNumPages(numPages)}
+          >
+            <Page pageNumber={pageNumber} />
+          </Document>
+          <p>
+            Page {pageNumber} of {numPages}
+          </p>
+        </div>
+      )}
       <div>
         {uploadedFiles.length > 0 && (
           <div>
