@@ -1,10 +1,6 @@
+Senare todo, down the line.
 - django plus, funkar för att debugga
 - hashrouter, lägga till routes
-
-- Fixa så displaya går.
-- Fixa första sidan
-
-
 - Fixa att routing system är med hash router istället för browser router
 
 Varje stand-up möte!
@@ -12,3 +8,10 @@ Varje stand-up möte!
 - Vad man gjorde
 - man planerar göra
 - om man är blockad
+
+----------------
+
+Nästa steg.
+
+- knapp så man kan ta bort pdf eller visa pdf
+- restriction på själva uppladdaren så att det bara går att ladda upp en pdf.

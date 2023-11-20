@@ -2,6 +2,8 @@ import React, { DragEvent, ChangeEvent, useState } from "react";
 
 export function Uploader() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
+
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -25,6 +27,7 @@ export function Uploader() {
   const handleUpload = () => {
     if (selectedFile) {
       console.log("Uploading file:", selectedFile);
+      setUploadedFiles((prevFiles) => [...prevFiles, selectedFile]);
     } else {
       console.log("No file selected");
     }
@@ -78,6 +81,19 @@ export function Uploader() {
       >
         Upload file
       </button>
+      <div>
+        {uploadedFiles.length > 0 && (
+          <div>
+            <h2>Uploaded Files:</h2>
+            <ul>
+              {uploadedFiles.map((file, index) => (
+                <li key={index}>{file.name}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+      </div>
     </div>
   );
 }

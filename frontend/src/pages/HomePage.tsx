@@ -12,7 +12,13 @@ const Home = (props: Props) => {
       .catch((error) => console.error(error));
     console.log(invoiceList);
   }, []);
-  return <div className="bg-black"></div>;
+  return <div className="">
+    {invoiceList.map((invoice: any) =>(
+      <li key={invoice.id}>
+        {invoice.invoice_number}
+      </li>
+    ))}
+  </div>;
 };
 
 export default Home;
