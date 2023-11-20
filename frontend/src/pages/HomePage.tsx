@@ -1,6 +1,8 @@
+
 import React, { useEffect, useState } from "react";
 
-interface Props {}
+
+
 
 const Home = (props: Props) => {
 
@@ -13,7 +15,6 @@ const Home = (props: Props) => {
         .catch(error => console.error(error));
         console.log(invoiceList)
     }, []);
-
   return (
     <div className="bg-black">
     </div>
