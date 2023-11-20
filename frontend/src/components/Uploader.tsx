@@ -30,17 +30,15 @@ export function Uploader() {
     }
   };
 
-
-
   return (
     <div
-      className="flex items-center justify-center w-full"
+      className="flex flex-col items-center justify-center w-full"
       onDrop={handleDrop}
       onDragOver={handleDragOver}
     >
       <label
         htmlFor="dropzone-file"
-        className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
+        className="flex flex-col items-center justify-center w-full h-64 w-72 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
       >
         <div className="flex flex-col items-center justify-center pt-5 pb-6">
           <svg
@@ -73,7 +71,13 @@ export function Uploader() {
           onChange={handleFileChange}
         />
       </label>
-      <button onClick={handleUpload}>Upload file</button>
+      <button
+        onClick={handleUpload}
+        type="button"
+        className="mt-2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+      >
+        Upload file
+      </button>
     </div>
   );
 }
