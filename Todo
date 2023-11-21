@@ -15,3 +15,4 @@ Nästa steg.
 
 - knapp så man kan ta bort pdf eller visa pdf
 - restriction på själva uppladdaren så att det bara går att ladda upp en pdf.
+- hur ska man göra post-requests till databasen, alltså vilka variabler måste fyllas?

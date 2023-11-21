@@ -30,25 +30,57 @@ export function Uploader() {
     e.preventDefault();
   };
 
-  const handleUpload = () => {
+  const handleUpload = async () => {
     if (selectedFile) {
       console.log("Uploading file:", selectedFile);
+
+      const formData = new FormData();
+      formData.append('document', selectedFile);
+
+      try {
+        const response = await fetch('http://127.0.0.1:8000/upload_file/', {
+          method: 'POST',
+          body: formData,
+        });
+
+        if (response.ok) {
+          console.log('File uploaded successfully');
+          // You can handle the success response here if needed
+        } else {
+          console.error('Failed to upload file');
+          // Handle error response here
+        }
+      } catch (error) {
+        console.error('Error during file upload:', error);
+        // Handle other errors here
+      }
+
       setUploadedFiles((prevFiles) => [...prevFiles, selectedFile]);
     } else {
       console.log("No file selected");
     }
   };
 
-  const handleView = () => {
-    if (selectedFile) {
-      // Display the PDF using react-pdf
-      // You can set the PDF source to the selected file
-      // and use the Viewer component from react-pdf
-      setPageNumber(1);
-    } else {
-      console.log("No file selected");
-    }
-  }
+
+  // const handleUpload = () => {
+  //   if (selectedFile) {
+  //     console.log("Uploading file:", selectedFile);
+  //     setUploadedFiles((prevFiles) => [...prevFiles, selectedFile]);
+  //   } else {
+  //     console.log("No file selected");
+  //   }
+  // };
+
+  // const handleView = () => {
+  //   if (selectedFile) {
+  //     // Display the PDF using react-pdf
+  //     // You can set the PDF source to the selected file
+  //     // and use the Viewer component from react-pdf
+  //     setPageNumber(1);
+  //   } else {
+  //     console.log("No file selected");
+  //   }
+  // }
 
   return (
     <div
@@ -97,14 +129,14 @@ export function Uploader() {
       >
         Upload PDF
       </button>
-      <button
+      {/* <button
         onClick={handleView}
         type="button"
         className="mt-2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
       >
         View PDF
-      </button>
-      {selectedFile && (
+      </button> */}
+      {/* {selectedFile && (
         <div style={{ width: '100%', height: '500px' }}>
           <Document
             file={URL.createObjectURL(selectedFile)}
@@ -112,12 +144,9 @@ export function Uploader() {
           >
             <Page pageNumber={pageNumber} />
           </Document>
-          <p>
-            Page {pageNumber} of {numPages}
-          </p>
         </div>
-      )}
-      <div>
+      )} */}
+      {/* <div>
         {uploadedFiles.length > 0 && (
           <div>
             <h2>Uploaded Files:</h2>
@@ -128,7 +157,7 @@ export function Uploader() {
             </ul>
           </div>
         )}
-      </div>
+      </div> */}
     </div>
   );
 }

@@ -13,9 +13,9 @@ const Home = (props: Props) => {
     console.log(invoiceList);
   }, []);
   return <div className="">
-    {invoiceList.map((invoice: any) =>(
-      <li key={invoice.id}>
-        {invoice.invoice_number}
+    {invoiceList.map((invoiceDocument: any) =>(
+      <li key={invoiceDocument.id}>
+        {invoiceDocument.name}
       </li>
     ))}
   </div>;

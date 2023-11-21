@@ -18,3 +18,10 @@ class Invoice(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class InvoiceDocument(models.Model):
+    document = models.FileField(upload_to='invoice_documents/')
+
+    def __str__(self):
+        return f"InvoiceDocument {self.id}"
