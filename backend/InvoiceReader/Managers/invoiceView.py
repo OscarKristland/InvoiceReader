@@ -4,9 +4,10 @@ import os
 from InvoiceReader.ocr_processor import process_uploaded_document, query_model
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from InvoiceReader.serializers import invoiceSerializer
+from InvoiceReader.Serializers import invoiceSerializer
 from rest_framework import status
-from InvoiceReader.models.invoiceModel import Invoice, InvoiceDocument
+from InvoiceReader.Models.invoiceModel import Invoice, InvoiceDocument
+from InvoiceReader.settings import MEDIA_ROOT
 
 
 @api_view(['POST'])
@@ -74,6 +75,27 @@ def get_invoice_list(request):
     else:
         return Response({'error': 'Invalid request method'}, status=status.HTTP_400_BAD_REQUEST)
 
+
+@api_view(['DELETE'])
+def clear_table(request):
+    try:
+        if request.method == 'DELETE':
+            print("Delete request started")
+            InvoiceDocument.objects.all().delete()
+            media_folder = os.path.join(
+                MEDIA_ROOT, 'invoice_documents')
+            for file_name in os.listdir(media_folder):
+                file_path = os.path.join(media_folder, file_name)
+                try:
+                    if os.path.isfile(file_path):
+                        os.unlink(file_path)
+                except Exception as e:
+                    print(f"Error deleting file {file_path}: {e}")
+            return JsonResponse({'detail': 'All entries deleted successfully'})
+        else:
+            return JsonResponse({'error': 'Method not allowed'}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 # Gammalt post/get-requst, används inte längre
 

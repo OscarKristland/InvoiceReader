@@ -1,23 +1,24 @@
-import React, { DragEvent, ChangeEvent, useState, useEffect } from "react";
+import { DragEvent, ChangeEvent, useState, useEffect } from "react";
+import { InvoiceInfo } from "./InvoiceInfo";
 
-interface Invoice {
-    id: number;
-    document: string;
-    name: string;
-    totalAmount: string;
-    sender: string;
-    recipient: string;
-    dueDate: string;
-    invoiceNumber: string;
+export interface Invoice {
+  id: number;
+  document: string;
+  name: string;
+  totalAmount: string;
+  sender: string;
+  recipient: string;
+  dueDate: string;
+  invoiceNumber: string;
 }
 
+interface UploaderProps {}
 
-export function Uploader() {
+export function Uploader(props: UploaderProps) {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
   const [fileUploaded, setFileUploaded] = useState<boolean>(false);
   const [invoices, setInvoices] = useState<Invoice[]>([]);
-
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -44,22 +45,22 @@ export function Uploader() {
       console.log("Uploading file:", selectedFile);
 
       const formData = new FormData();
-      formData.append('document', selectedFile);
+      formData.append("document", selectedFile);
 
       try {
-        const response = await fetch('http://127.0.0.1:8000/upload_file/', {
-          method: 'POST',
+        const response = await fetch("http://127.0.0.1:8000/upload_file/", {
+          method: "POST",
           body: formData,
         });
 
         if (response.ok) {
-          console.log('File uploaded successfully');
+          console.log("File uploaded successfully");
           setFileUploaded(true);
         } else {
-          console.error('Failed to upload file');
+          console.error("Failed to upload file");
         }
       } catch (error) {
-        console.error('Error during file upload:', error);
+        console.error("Error during file upload:", error);
       }
 
       setUploadedFiles((prevFiles) => [...prevFiles, selectedFile]);
@@ -71,19 +72,41 @@ export function Uploader() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        if (fileUploaded) { 
-          const response = await fetch('http://127.0.0.1:8000/get_invoice_list/');
+        if (fileUploaded) {
+          const response = await fetch(
+            "http://127.0.0.1:8000/get_invoice_list/"
+          );
           const data = await response.json();
-          console.log('Raw Response:', data);
+          console.log("Raw Response:", data);
           setInvoices(data);
         }
       } catch (error) {
-        console.error('Error fetching invoice list:', error);
+        console.error("Error fetching invoice list:", error);
       }
     };
 
     fetchData();
   }, [fileUploaded]);
+
+  const delete_entries = async () => {
+    try {
+      const response = await fetch("http://127.0.0.1:8000/clear_table/", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log("Response from clear_table:", data);
+      } else {
+        console.error("Failed to clear table:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error during clear_table request:", error);
+    }
+  };
 
   return (
     <div
@@ -126,27 +149,22 @@ export function Uploader() {
         />
       </label>
       <div>
-        <button
-          onClick={handleUpload}
-          type="button"
-          className="mt-2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-        >
-          Upload PDF
-        </button>
-      </div>
-      <div>
-      <div>
-        <h1>Invoice List</h1>
-          {invoices.map((item) => (
-            <div key={item.id}>
-              <p>Document: {item.document}</p>
-              <p>Name: {item.name}</p>
-              <p>Total Amount: {item.totalAmount}</p>
-              <p>Sender: {item.sender}</p>
-              <p>Recipient: {item.recipient}</p>
-              <p>Due Date: {item.dueDate}</p>
-            </div>
-          ))}
+        <div>
+          <button
+            onClick={handleUpload}
+            type="button"
+            className="mt-2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+          >
+            Upload PNG
+          </button>
+          <button
+            onClick={delete_entries}
+            type="button"
+            className="mt-2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+          >
+            Delete PDF
+          </button>
+          <InvoiceInfo invoices={invoices} />
         </div>
       </div>
     </div>
