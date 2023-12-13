@@ -7,6 +7,7 @@ from rest_framework.decorators import api_view
 from InvoiceReader.serializers import invoiceSerializer
 from rest_framework import status
 from InvoiceReader.models.invoiceModel import InvoiceDocument
+from InvoiceReader.settings import MEDIA_ROOT, MEDIA_URL
 
 
 @api_view(['POST'])
@@ -16,17 +17,11 @@ def upload_file(request):
         invoice_doc = process_uploaded_document(
             uploaded_file, InvoiceDocument)
 
-        # Retrieve OCR results
-        output_total_amount = query_model(
-            invoice_doc.document.path, "What is the total amount?")
-        output_invoice_number = query_model(
-            invoice_doc.document.path, "What is the invoice number?")
-        output_invoice_sender = query_model(
-            invoice_doc.document.path, "Who is this from?")
-        output_invoice_recipient = query_model(
-            invoice_doc.document.path, "Who is the sent to?")
-        output_invoice_duedate = query_model(
-            invoice_doc.document.path, "When is the due date?")
+        query_model(invoice_doc.document.path, "What is the total amount?")
+        query_model(invoice_doc.document.path, "What is the invoice number?")
+        query_model(invoice_doc.document.path, "Who is this from?")
+        query_model(invoice_doc.document.path, "Who is the sent to?")
+        query_model(invoice_doc.document.path, "When is the due date?")
 
         return Response({'detail': 'File uploaded and processed successfully'}, status=status.HTTP_201_CREATED)
 
@@ -72,6 +67,15 @@ def clear_table(request):
         if request.method == 'DELETE':
             print("Delete request started")
             InvoiceDocument.objects.all().delete()
+            media_folder = os.path.join(
+                MEDIA_ROOT, 'invoice_documents')
+            for file_name in os.listdir(media_folder):
+                file_path = os.path.join(media_folder, file_name)
+                try:
+                    if os.path.isfile(file_path):
+                        os.unlink(file_path)
+                except Exception as e:
+                    print(f"Error deleting file {file_path}: {e}")
             return JsonResponse({'detail': 'All entries deleted successfully'})
         else:
             return JsonResponse({'error': 'Method not allowed'}, status=status.HTTP_405_METHOD_NOT_ALLOWED)

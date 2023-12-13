@@ -166,7 +166,6 @@ export function Uploader() {
         <h1>Invoice List</h1>
           {invoices.map((item) => (
             <div key={item.id}>
-              <p>Document: {item.document}</p>
               <p>Name: {item.name}</p>
               <p>Total Amount: {item.totalAmount}</p>
               <p>Sender: {item.sender}</p>
