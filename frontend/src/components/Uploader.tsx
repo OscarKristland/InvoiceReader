@@ -1,13 +1,24 @@
-import React, { DragEvent, ChangeEvent, useState } from "react";
+import React, { DragEvent, ChangeEvent, useState, useEffect } from "react";
 import { Document, Page, pdfjs } from "react-pdf";
+
+interface Invoice {
+    id: number;
+    document: string;
+    name: string;
+    totalAmount: string;
+    sender: string;
+    recipient: string;
+    dueDate: string;
+    invoiceNumber: string;
+}
 
 pdfjs.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
 
 export function Uploader() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
-  const [numPages, setNumPages] = useState<number | null>(null);
-  const [pageNumber, setPageNumber] = useState(1);
+  const [fileUploaded, setFileUploaded] = useState<boolean>(false);
+  const [invoices, setInvoices] = useState<Invoice[]>([]);
 
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -45,14 +56,12 @@ export function Uploader() {
 
         if (response.ok) {
           console.log('File uploaded successfully');
-          // You can handle the success response here if needed
+          setFileUploaded(true);
         } else {
           console.error('Failed to upload file');
-          // Handle error response here
         }
       } catch (error) {
         console.error('Error during file upload:', error);
-        // Handle other errors here
       }
 
       setUploadedFiles((prevFiles) => [...prevFiles, selectedFile]);
@@ -61,26 +70,22 @@ export function Uploader() {
     }
   };
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        if (fileUploaded) { 
+          const response = await fetch('http://127.0.0.1:8000/get_invoice_list/');
+          const data = await response.json();
+          console.log('Raw Response:', data);
+          setInvoices(data);
+        }
+      } catch (error) {
+        console.error('Error fetching invoice list:', error);
+      }
+    };
 
-  // const handleUpload = () => {
-  //   if (selectedFile) {
-  //     console.log("Uploading file:", selectedFile);
-  //     setUploadedFiles((prevFiles) => [...prevFiles, selectedFile]);
-  //   } else {
-  //     console.log("No file selected");
-  //   }
-  // };
-
-  // const handleView = () => {
-  //   if (selectedFile) {
-  //     // Display the PDF using react-pdf
-  //     // You can set the PDF source to the selected file
-  //     // and use the Viewer component from react-pdf
-  //     setPageNumber(1);
-  //   } else {
-  //     console.log("No file selected");
-  //   }
-  // }
+    fetchData();
+  }, [fileUploaded]);
 
   return (
     <div
@@ -129,35 +134,21 @@ export function Uploader() {
       >
         Upload PDF
       </button>
-      {/* <button
-        onClick={handleView}
-        type="button"
-        className="mt-2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-      >
-        View PDF
-      </button> */}
-      {/* {selectedFile && (
-        <div style={{ width: '100%', height: '500px' }}>
-          <Document
-            file={URL.createObjectURL(selectedFile)}
-            onLoadSuccess={({ numPages }) => setNumPages(numPages)}
-          >
-            <Page pageNumber={pageNumber} />
-          </Document>
+      <div>
+      <div>
+        <h1>Invoice List</h1>
+          {invoices.map((item) => (
+            <div key={item.id}>
+              <p>Document: {item.document}</p>
+              <p>Name: {item.name}</p>
+              <p>Total Amount: {item.totalAmount}</p>
+              <p>Sender: {item.sender}</p>
+              <p>Recipient: {item.recipient}</p>
+              <p>Due Date: {item.dueDate}</p>
+            </div>
+          ))}
         </div>
-      )} */}
-      {/* <div>
-        {uploadedFiles.length > 0 && (
-          <div>
-            <h2>Uploaded Files:</h2>
-            <ul>
-              {uploadedFiles.map((file, index) => (
-                <li key={index}>{file.name}</li>
-              ))}
-            </ul>
-          </div>
-        )}
-      </div> */}
+      </div>
     </div>
   );
 }

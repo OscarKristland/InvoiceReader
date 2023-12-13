@@ -1,4 +1,5 @@
 Senare todo, down the line.
+
 - django plus, funkar för att debugga
 - hashrouter, lägga till routes
 - Fixa att routing system är med hash router istället för browser router
@@ -9,10 +10,11 @@ Varje stand-up möte!
 - man planerar göra
 - om man är blockad
 
-----------------
+---
 
 Nästa steg.
 
-- knapp så man kan ta bort pdf eller visa pdf
+- knapp så man kan txa bort pdf eller visa pdf
 - restriction på själva uppladdaren så att det bara går att ladda upp en pdf.
-- hur ska man göra post-requests till databasen, alltså vilka variabler måste fyllas?
+
+-känner att jag kanske skulle vilja ha lite tips på videos eller resurser för att implementera tensorflow.
