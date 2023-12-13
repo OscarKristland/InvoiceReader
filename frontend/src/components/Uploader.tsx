@@ -1,4 +1,4 @@
-import React, { DragEvent, ChangeEvent, useState } from "react";
+import { DragEvent, ChangeEvent, useState } from "react";
 
 export function Uploader() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -41,7 +41,7 @@ export function Uploader() {
     >
       <label
         htmlFor="dropzone-file"
-        className="flex flex-col items-center justify-center w-full h-64 w-72 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
+        className="flex flex-col items-center justify-center h-64 w-72 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
       >
         <div className="flex flex-col items-center justify-center pt-5 pb-6">
           <svg
@@ -63,7 +63,7 @@ export function Uploader() {
             <span className="font-semibold">Click to upload</span> or drag and
             drop
           </p>
-          <p className="text-xs text-gray-500 dark:text-gray-400">.PDF</p>
+          <p className="text-xs text-gray-500 dark:text-gray-400">.PNG</p>
         </div>
         <input
           id="dropzone-file"
@@ -73,20 +73,15 @@ export function Uploader() {
           onChange={handleFileChange}
         />
       </label>
-      <button
-        onClick={handleUpload}
-        type="button"
-        className="mt-2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-      >
-        Upload PDF
-      </button>
-      <button
-        onClick={handleUpload}
-        type="button"
-        className="mt-2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-      >
-        View PDF
-      </button>
+      <div>
+        <button
+          onClick={handleUpload}
+          type="button"
+          className="mt-2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+        >
+          Upload PDF
+        </button>
+      </div>
       <div>
         {uploadedFiles.length > 0 && (
           <div>
