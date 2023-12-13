@@ -1,8 +1,23 @@
-import { DragEvent, ChangeEvent, useState } from "react";
+import React, { DragEvent, ChangeEvent, useState, useEffect } from "react";
+
+interface Invoice {
+    id: number;
+    document: string;
+    name: string;
+    totalAmount: string;
+    sender: string;
+    recipient: string;
+    dueDate: string;
+    invoiceNumber: string;
+}
+
 
 export function Uploader() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
+  const [fileUploaded, setFileUploaded] = useState<boolean>(false);
+  const [invoices, setInvoices] = useState<Invoice[]>([]);
+
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -24,14 +39,51 @@ export function Uploader() {
     e.preventDefault();
   };
 
-  const handleUpload = () => {
+  const handleUpload = async () => {
     if (selectedFile) {
       console.log("Uploading file:", selectedFile);
+
+      const formData = new FormData();
+      formData.append('document', selectedFile);
+
+      try {
+        const response = await fetch('http://127.0.0.1:8000/upload_file/', {
+          method: 'POST',
+          body: formData,
+        });
+
+        if (response.ok) {
+          console.log('File uploaded successfully');
+          setFileUploaded(true);
+        } else {
+          console.error('Failed to upload file');
+        }
+      } catch (error) {
+        console.error('Error during file upload:', error);
+      }
+
       setUploadedFiles((prevFiles) => [...prevFiles, selectedFile]);
     } else {
       console.log("No file selected");
     }
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        if (fileUploaded) { 
+          const response = await fetch('http://127.0.0.1:8000/get_invoice_list/');
+          const data = await response.json();
+          console.log('Raw Response:', data);
+          setInvoices(data);
+        }
+      } catch (error) {
+        console.error('Error fetching invoice list:', error);
+      }
+    };
+
+    fetchData();
+  }, [fileUploaded]);
 
   return (
     <div
@@ -83,16 +135,19 @@ export function Uploader() {
         </button>
       </div>
       <div>
-        {uploadedFiles.length > 0 && (
-          <div>
-            <h2>Uploaded Files:</h2>
-            <ul>
-              {uploadedFiles.map((file, index) => (
-                <li key={index}>{file.name}</li>
-              ))}
-            </ul>
-          </div>
-        )}
+      <div>
+        <h1>Invoice List</h1>
+          {invoices.map((item) => (
+            <div key={item.id}>
+              <p>Document: {item.document}</p>
+              <p>Name: {item.name}</p>
+              <p>Total Amount: {item.totalAmount}</p>
+              <p>Sender: {item.sender}</p>
+              <p>Recipient: {item.recipient}</p>
+              <p>Due Date: {item.dueDate}</p>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

@@ -16,7 +16,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from InvoiceReader.managers.invoiceView import create_invoice
+from django.conf import settings
+from django.conf.urls.static import static
+from InvoiceReader.managers.invoiceView import create_invoice, upload_file
 from InvoiceReader.managers.invoiceView import get_invoice_list
 
 
@@ -24,4 +26,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('create_invoice/', create_invoice, name='create_invoice'),
     path('get_invoice_list/', get_invoice_list, name='get_invoice_list'),
+    path('upload_file/', upload_file, name='upload_file')
 ]
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL,
+                          document_root=settings.MEDIA_ROOT)
