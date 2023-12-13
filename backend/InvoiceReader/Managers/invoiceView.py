@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from InvoiceReader.serializers import invoiceSerializer
 from rest_framework import status
-from InvoiceReader.models.invoiceModel import Invoice, InvoiceDocument
+from InvoiceReader.models.invoiceModel import InvoiceDocument
 
 
 @api_view(['POST'])
@@ -27,15 +27,6 @@ def upload_file(request):
             invoice_doc.document.path, "Who is the sent to?")
         output_invoice_duedate = query_model(
             invoice_doc.document.path, "When is the due date?")
-
-        # Create a JSON response
-        json_response = {
-            'total_amount': output_total_amount,
-            'invoice_number': output_invoice_number,
-            'invoice_sender': output_invoice_sender,
-            'invoice_recipient': output_invoice_recipient,
-            'invoice_duedate': output_invoice_duedate,
-        }
 
         return Response({'detail': 'File uploaded and processed successfully'}, status=status.HTTP_201_CREATED)
 
@@ -73,6 +64,19 @@ def get_invoice_list(request):
 
     else:
         return Response({'error': 'Invalid request method'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['DELETE'])
+def clear_table(request):
+    try:
+        if request.method == 'DELETE':
+            print("Delete request started")
+            InvoiceDocument.objects.all().delete()
+            return JsonResponse({'detail': 'All entries deleted successfully'})
+        else:
+            return JsonResponse({'error': 'Method not allowed'}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 # Gammalt post/get-requst, används inte längre

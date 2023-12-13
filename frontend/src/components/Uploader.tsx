@@ -85,6 +85,26 @@ export function Uploader() {
     fetchData();
   }, [fileUploaded]);
 
+  const delete_entries = async () => {
+    try {
+    const response = await fetch('http://127.0.0.1:8000/clear_table/', {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      console.log('Response from clear_table:', data);
+    } else {
+      console.error('Failed to clear table:', response.statusText);
+    }
+  } catch (error) {
+    console.error('Error during clear_table request:', error);
+  }
+  }
+
   return (
     <div
       className="flex flex-col items-center justify-center w-full"
@@ -132,6 +152,13 @@ export function Uploader() {
           className="mt-2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
         >
           Upload PDF
+        </button>
+        <button
+          onClick={delete_entries}
+          type="button"
+          className="mt-2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+        >
+          Delete PDF
         </button>
       </div>
       <div>
