@@ -143,7 +143,7 @@ export function Uploader(props: UploaderProps) {
         <input
           id="dropzone-file"
           type="file"
-          accept=".pdf"
+          accept=".png"
           className="hidden"
           onChange={handleFileChange}
         />
